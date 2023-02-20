@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "serenity-bdd update",
+    "postinstall": "serenity-bdd update --artifact net.serenity-bdd:serenity-cli:jar:3.6.9",
     "clean": "rimraf target",
     "test": "failsafe clean test:execute test:report",
-    "test:execute": "cucumber-js",
-    "test:report": "serenity-bdd run --features ./features",
+    "test:execute": "cucumber-js --retry 2",
+    "test:report": "serenity-bdd run --features ./features --artifact net.serenity-bdd:serenity-cli:jar:3.6.9",
     "start": "mkdirp target/site/serenity && npx http-server -p 8080 target/site/serenity -s -o",
     "lint": "eslint --ext ts --config .eslintrc.js .",
     "lint:fix": "npm run lint -- --fix"

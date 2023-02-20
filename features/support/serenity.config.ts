@@ -1,8 +1,9 @@
-import { Before, BeforeAll, defineParameterType } from '@cucumber/cucumber';
-import { actorCalled, actorInTheSpotlight, configure, engage } from '@serenity-js/core';
+import {After, Before, BeforeAll, defineParameterType} from '@cucumber/cucumber';
+import {actorCalled, actorInTheSpotlight, configure, engage} from '@serenity-js/core';
+import {existsSync, mkdirSync, rmSync} from 'fs';
 import path from 'path';
 
-import { Actors } from '../../src';
+import {Actors} from '../../src';
 
 /**
  * @desc
@@ -15,10 +16,12 @@ BeforeAll(function () {
         crew: [
             '@serenity-js/console-reporter',
             '@serenity-js/serenity-bdd',
-            [ '@serenity-js/core:ArtifactArchiver', { outputDirectory: path.resolve(__dirname, `../../target/site/serenity`) } ],
+            ['@serenity-js/core:ArtifactArchiver', {outputDirectory: path.resolve(__dirname, `../../target/site/serenity`)}],
             // '@serenity-js/core:StreamReporter',
         ]
     });
+
+    rmSync('.tmp', {recursive: true, force: true});
 });
 
 /**
@@ -28,6 +31,10 @@ BeforeAll(function () {
  */
 Before(function () {
     engage(new Actors(this.parameters.baseApiUrl));
+});
+
+After({tags: '@create-tmp'}, function () {
+    if (!existsSync('.tmp')) mkdirSync('.tmp')
 });
 
 /**
